@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "scheme": "HealthTech",
+    "scheme": "my-app",
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"

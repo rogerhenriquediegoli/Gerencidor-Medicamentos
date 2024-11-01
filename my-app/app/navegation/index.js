@@ -1,58 +1,136 @@
-import { StyleSheet, Text, View, Image, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, View, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
 
 export default function Index() {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    const [medicines, setMedicines] = useState([
+        { id: 1, name: 'Paracetamol', dosage: '500 mg', frequency: '8 em 8 horas' },
+        { id: 2, name: 'Ibuprofeno', dosage: '200 mg', frequency: '12 em 12 horas' },
+        // Add more medicine data as needed
+    ]);
+
+    const handleLogout = () => {
+        console.log('Logout pressed');
+        // Add your logout logic here (e.g., navigation or clearing tokens)
+    };
+
+    const handleComplete = (id) => {
+        console.log(`Concluir medicamento ${id}`);
+        // Add your complete logic here
+    };
+
+    const handleDelete = (id) => {
+        console.log(`Deletar medicamento ${id}`);
+        setMedicines(prevMedicines => prevMedicines.filter(medicine => medicine.id !== id));
+    };
+
+    const filteredMedicines = medicines.filter(medicine =>
+        medicine.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
     return (
-        <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <View style={styles.top}>
-                    <Image source={require('../../assets/images/logo.png')}/>
-                    <Text style={styles.titulo}>Boas-vindas!</Text>
-                </View>
-
-                <View style={styles.form}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Digite a especialidade"
-                        secureTextEntry={true}
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <View style={styles.container}>
+                {/* Logout button */}
+                <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                    <Image 
+                        source={require('../../assets/images/sair-logo.png')} // Configure the path
+                        style={styles.logoutImage}
                     />
+                </TouchableOpacity>
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Digite sua localização"
-                        secureTextEntry={true}
-                    />
+                <Image 
+                    source={require('../../assets/images/logo.png')} 
+                    style={styles.image} 
+                />
+                <Text style={styles.titulo}>Boas-vindas!</Text>
+                <View style={styles.linha}></View>
 
-                    <TouchableOpacity style={styles.button}>
-                            <Text style={styles.buttonText}>Buscar</Text>
+                {/* Info and Add buttons */}
+                <View style={styles.buttonContainer}>
+                    {/* Info Button */}
+                    <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
+                        <Text style={styles.infoIcon}>ℹ️</Text>
+                    </TouchableOpacity>
+
+                    {/* Add Button */}
+                    <TouchableOpacity style={styles.addButton}>
+                        <Text style={styles.addIcon}>+</Text>
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.depoimentos}>
-                    <Text style={styles.depoimentosTitle}>Depoimentos</Text>
+                {/* Modal */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalText}>{`
+ Tutorial - U&R Med
 
-                    <View style={styles.depoimentoBlock}>
-                        <Text style={styles.texts}>
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
-                        </Text>
-                        <Text style={styles.textBottom}>Júlio, 40 anos, São Paulo/SP.</Text>
-                    </View>
+Para começar a usar o U&R Med, siga estes passos para cadastrar sua prescrição:
 
-                    <View style={styles.depoimentoBlock}>
-                        <Text style={styles.texts}>
-                            Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
-                        </Text>
-                        <Text style={styles.textBottom}>Júlio, 40 anos, São Paulo/SP.</Text>
-                    </View>
+1. Nome do Medicamento
+Insira o nome completo do medicamento.
 
-                    <View style={styles.depoimentoBlockWithoutBorder}>
-                        <Text style={styles.texts}>
-                            Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores.
-                        </Text>
-                        <Text style={styles.textBottom}>Júlio, 40 anos, São Paulo/SP.</Text>
+2. Dosagem
+Informe a dosagem recomendada, como "500 mg" ou "1 comprimido".
+
+3. Frequência
+Defina a frequência de uso (ex.: a cada 8 horas, uma vez ao dia).
+
+4. Data e Horário de Início
+Escolha a data e horário da primeira dose. O U&R Med programará os alertas.
+
+5. Confirmação
+Após inserir tudo, confirme. A cada alerta, confirme que tomou para seguir para a próxima dose.
+
+Correção de Erros
+Para corrigir dosagem ou horário, delete o cadastro e adicione novamente com as informações certas.
+                           
+                            `}</Text>
+                            <TouchableOpacity onPress={() => setModalVisible(false)}>
+                                <Text style={styles.modalCloseButton}>Fechar</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-            </ScrollView>
-        </View>
+                </Modal>
+
+                {/* Medicine List */}
+                <Text style={styles.sectionTitle}>Meus Medicamentos</Text>
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="Buscar medicamento"
+                    value={searchText}
+                    onChangeText={setSearchText}
+                />
+
+                {filteredMedicines.map(medicine => (
+                    <View key={medicine.id} style={styles.medicineCard}>
+                        <View style={styles.medicineHeader}>
+                            <Text style={styles.medicineName}>{medicine.name}</Text>
+                            <TouchableOpacity style={styles.viewMoreButton}>
+                                <Text style={styles.viewMoreText}>Ver mais</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={styles.medicineDetail}>Dosagem: {medicine.dosage}</Text>
+                        <Text style={styles.medicineDetail}>Frequência: {medicine.frequency}</Text>
+                        <View style={styles.cardButtons}>
+                            <TouchableOpacity style={styles.completeButton} onPress={() => handleComplete(medicine.id)}>
+                                <Text style={styles.buttonText}>Concluir</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(medicine.id)}>
+                                <Text style={styles.buttonText}>Deletar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                ))}
+            </View>
+        </ScrollView>
     );
 }
 
@@ -60,85 +138,35 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ECF8DE',
-        paddingHorizontal: 20, // Adiciona espaçamento nas laterais
+        paddingHorizontal: 20,
+    },
+    image: {
+        width: 200,
+        height: 200,
+        marginLeft: -50,
+        marginTop: -30,
+        marginBottom: -45,
     },
     scrollViewContent: {
         flexGrow: 1,
-        justifyContent: 'center', // Centraliza verticalmente
+        justifyContent: 'center',
     },
-    textBottom: {
-        color: '#6B6E71',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: 5, // Espaço entre o texto principal e o textBottom
-        marginBottom: 10, // Espaço entre o textBottom e a linha
+    logoutButton: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        width: 40,
+        height: 40,
     },
-    texts: {
-        fontSize: 19,
-        color: '#90989F',
-        padding: 15,
-        marginBottom: 0, // Garante que não haja espaçamento abaixo do texto principal
-        textAlign: 'left', // Alinha o texto à esquerda
-        maxWidth: '100%', // Define uma largura máxima para o texto
-        alignSelf: 'center', // Centraliza horizontalmente o bloco de texto
-    },
-    button: {
-        backgroundColor: '#0B3B60',
-        padding: 10,
-        borderRadius: 5,
-        marginTop: 10,
-        textAlign: 'center',
-        width: '100%', // Usa a largura total do formulário
-        height: 48,
-    },
-    buttonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-    form: {
-        width: '100%', // Largura total do contêiner
-        maxWidth: 400, // Limita a largura máxima do formulário
-        borderColor: '#ccc',
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 5,
-        backgroundColor: '#FFFFFF',
-
-        // Estilos de sombra para iOS
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        // Estilos de sombra para Android
-        elevation: 5,
-        alignSelf: 'center', // Centraliza horizontalmente
-        marginBottom: 30
-    },
-    input: {
+    logoutImage: {
         width: '100%',
-        height: 47,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        padding: 10,
-        marginTop: 14,
-        borderRadius: 5,
-        backgroundColor: '#F8F8F8',
-
-        // Estilos de sombra para iOS
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        // Estilos de sombra para Android
-        elevation: 5,
+        height: '100%',
+        resizeMode: 'contain',
     },
-    top: {
-        alignItems: 'flex-start', // Alinha à esquerda
-        marginBottom: 30,
+    linha: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#000',
+        marginBottom: 20,
     },
     titulo: {
         fontSize: 24,
@@ -146,25 +174,125 @@ const styles = StyleSheet.create({
         margin: 10,
         fontWeight: 'bold',
     },
-    depoimentos: {
-        alignSelf: 'center',
-        width: '100%',
-        maxWidth: 400,
-        marginTop: 20,
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        marginTop: 0,
     },
-    depoimentosTitle: {
-        color: '#0B3B60',
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
+    infoButton: {
+        backgroundColor: 'transparent',
+    },
+    infoIcon: {
+        fontSize: 25,
+        color: '#6B6E71',
+        marginTop: -6
+    },
+    addButton: {
+        backgroundColor: '#80CC28',
+        padding: 10,
+        borderRadius: 5,
+        width: 30,
+        height: 30
+    },
+    addIcon: {
+        fontSize: 18,
+        color: '#ffffff',
+        alignSelf: 'center',
+        marginTop: -8
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 16,
+        color: '#6B6E71',
+        textAlign: 'justify',
         marginBottom: 20,
     },
-    depoimentoBlock: {
-        marginBottom: 10, // Espaçamento entre blocos de depoimentos
-        borderBottomWidth: 1,
-        borderColor: '#E7EBEF',
+    modalCloseButton: {
+        color: '#0B3B60',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
-    depoimentoBlockWithoutBorder: {
-        marginBottom: 120, // Espaçamento entre blocos de depoimentos
+    sectionTitle: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: '#0F4B3D',
+        marginTop: 20,
+        marginBottom: 20,
+        textAlign: 'center'
+    },
+    searchInput: {
+        backgroundColor: '#FFF',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 30,
+    },
+    medicineCard: {
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    medicineHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    medicineName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    viewMoreButton: {
+        padding: 5,
+    },
+    viewMoreText: {
+        color: '#0B3B60',
+    },
+    medicineDetail: {
+        color: '#555',
+        fontSize: 14,
+        marginTop: 5,
+    },
+    cardButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    completeButton: {
+        backgroundColor: '#80CC28',
+        padding: 8,
+        borderRadius: 5,
+        flex: 1,
+        marginRight: 5,
+    },
+    deleteButton: {
+        backgroundColor: '#FF5A5A',
+        padding: 8,
+        borderRadius: 5,
+        flex: 1,
+        marginLeft: 5,
+    },
+    buttonText: {
+        color: '#FFF',
+        textAlign: 'center',
+        fontWeight: 'bold',
     },
 });

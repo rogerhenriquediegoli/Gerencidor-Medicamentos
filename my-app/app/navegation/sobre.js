@@ -62,19 +62,38 @@ export default function Sobre() {
                     'Quem somos',
                     whoVisible,
                     setWhoVisible,
-                    `U&R Med...`
+                    `
+U&R Med
+ 
+Somos uma dupla de estudantes do curso técnico em Desenvolvimento de Sistemas, apaixonados por tecnologia e saúde. 
+
+Acreditamos que a inovação pode transformar a forma como as pessoas gerenciam seus medicamentos, trazendo mais segurança e praticidade ao dia a dia. 
+
+Com o U&R Med, queremos contribuir para um futuro onde a tecnologia e a saúde andem juntas.`
                 )}
                 {renderButton(
                     'Sobre o App',
                     appVisible,
                     setAppVisible,
-                    `O U&R Med foi criado para...`
+                    `
+O U&R Med foi criado para automatizar a gestão de medicamentos, tornando o processo mais prático para o usuário. Com ele, você poderá:
+ 
+-> Registrar sua prescrição: Insira os dados de sua prescrição e o U&R Med cuidará do resto.
+
+-> Alertas automáticos: O app programa automaticamente os horários de suas dosagens. Você só precisa confirmar que tomou a medicação para que o app atualize e programe a próxima dose.
+
+-> Controle simples e eficiente: A interface intuitiva permite que você acompanhe facilmente seus tratamentos, sem complicações.
+
+Com o U&R Med, o gerenciamento de medicamentos é simples, seguro e automatizado, garantindo que você nunca perca uma dose importante.
+`
                 )}
                 {renderButton(
                     'Fale conosco',
                     contactVisible,
                     setContactVisible,
-                    'Se você tiver alguma dúvida ou feedback...'
+                    `
+Se você tiver alguma dúvida ou feedback, sinta-se à vontade para entrar em contato conosco pelo e-mail suporte@example.com.
+                    `
                 )}
             </View>
         </ScrollView>
