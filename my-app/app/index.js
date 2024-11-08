@@ -1,12 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Linking} from 'react-native';
-import {Link} from 'expo-router'
+import React from 'react';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
 
-export default function index() {
+export default function Login() {
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Image source={require('../assets/images/logo.png')}  style={styles.imagem} />
+        <Image source={require('../assets/images/logo.png')} style={styles.imagem} />
         <Text style={styles.titulo}>Faça login em sua conta</Text>
       </View>
 
@@ -25,19 +26,25 @@ export default function index() {
           secureTextEntry={true}
         />
 
-        <Link href='/navegation' style={styles.button}><Text style={styles.buttonText}>Entrar</Text></Link>
+        <TouchableOpacity 
+          style={styles.button} 
+          onPress={() => router.push('/navegation')} // Navigate to 'Home' screen
+        >
+          <Text style={styles.buttonText}>Entrar</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.bottomContainer}>
-          <Text style={styles.linkCadastro}>
-            <Text>Ainda não tem conta? </Text>
-            <Text style={[styles.linkText, { color: '#34C759', fontWeight: 'bold' }]}>
-              <Link href='/cadastro'>Faça seu cadastro!</Link>
-            </Text>
+        <Text style={styles.linkCadastro}>
+          <Text>Ainda não tem conta? </Text>
+          <Text
+            style={[styles.linkText, { color: '#34C759', fontWeight: 'bold' }]}
+            onPress={() => router.push('/cadastro')} // Navigate to 'Cadastro' screen
+          >
+            Faça seu cadastro!
           </Text>
+        </Text>
       </View>
-
-      <StatusBar style="auto" />
     </View>
   );
 }
@@ -70,18 +77,16 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderRadius: 5,
     backgroundColor: '#F8F8F8',
-
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#ECF8DE'
+    backgroundColor: '#ECF8DE',
   },
   topContainer: {
     alignItems: 'center',
@@ -103,7 +108,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
     width: '85%',
-    height: 48
+    height: 48,
   },
   buttonText: {
     color: '#fff',
@@ -111,10 +116,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
-
   linkCadastro: {
     color: '#0B3B60',
     marginTop: 15,
     fontSize: 16,
-  }
+  },
 });

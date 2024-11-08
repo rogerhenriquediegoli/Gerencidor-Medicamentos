@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import { router } from 'expo-router';
 
 export default function Index() {
     const [modalVisible, setModalVisible] = useState(false);
@@ -12,18 +13,22 @@ export default function Index() {
 
     const handleLogout = () => {
         console.log('Logout pressed');
-        // Add your logout logic here (e.g., navigation or clearing tokens)
+        router.push('/');
     };
 
     const handleComplete = (id) => {
         console.log(`Concluir medicamento ${id}`);
-        // Add your complete logic here
     };
 
     const handleDelete = (id) => {
         console.log(`Deletar medicamento ${id}`);
         setMedicines(prevMedicines => prevMedicines.filter(medicine => medicine.id !== id));
     };
+    const handleSeeMore = (id) => {
+        console.log(`Ver mais detalhes do medicamento ${id}`);
+        router.push(`details`);
+    };
+    
 
     const filteredMedicines = medicines.filter(medicine =>
         medicine.name.toLowerCase().includes(searchText.toLowerCase())
@@ -32,10 +37,9 @@ export default function Index() {
     return (
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
             <View style={styles.container}>
-                {/* Logout button */}
                 <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                     <Image 
-                        source={require('../../assets/images/sair-logo.png')} // Configure the path
+                        source={require('../../assets/images/sair-logo.png')}
                         style={styles.logoutImage}
                     />
                 </TouchableOpacity>
@@ -47,20 +51,15 @@ export default function Index() {
                 <Text style={styles.titulo}>Boas-vindas!</Text>
                 <View style={styles.linha}></View>
 
-                {/* Info and Add buttons */}
                 <View style={styles.buttonContainer}>
-                    {/* Info Button */}
                     <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
                         <Text style={styles.infoIcon}>ℹ️</Text>
                     </TouchableOpacity>
-
-                    {/* Add Button */}
                     <TouchableOpacity style={styles.addButton}>
                         <Text style={styles.addIcon}>+</Text>
                     </TouchableOpacity>
                 </View>
 
-                {/* Modal */}
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -70,7 +69,7 @@ export default function Index() {
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalContent}>
                             <Text style={styles.modalText}>{`
- Tutorial - U&R Med
+Tutorial - U&R Med
 
 Para começar a usar o U&R Med, siga estes passos para cadastrar sua prescrição:
 
@@ -91,7 +90,6 @@ Após inserir tudo, confirme. A cada alerta, confirme que tomou para seguir para
 
 Correção de Erros
 Para corrigir dosagem ou horário, delete o cadastro e adicione novamente com as informações certas.
-                           
                             `}</Text>
                             <TouchableOpacity onPress={() => setModalVisible(false)}>
                                 <Text style={styles.modalCloseButton}>Fechar</Text>
@@ -100,7 +98,6 @@ Para corrigir dosagem ou horário, delete o cadastro e adicione novamente com as
                     </View>
                 </Modal>
 
-                {/* Medicine List */}
                 <Text style={styles.sectionTitle}>Meus Medicamentos</Text>
                 <TextInput
                     style={styles.searchInput}
@@ -113,7 +110,7 @@ Para corrigir dosagem ou horário, delete o cadastro e adicione novamente com as
                     <View key={medicine.id} style={styles.medicineCard}>
                         <View style={styles.medicineHeader}>
                             <Text style={styles.medicineName}>{medicine.name}</Text>
-                            <TouchableOpacity style={styles.viewMoreButton}>
+                            <TouchableOpacity style={styles.viewMoreButton} onPress={() => handleSeeMore(medicine.id)}>
                                 <Text style={styles.viewMoreText}>Ver mais</Text>
                             </TouchableOpacity>
                         </View>
@@ -134,6 +131,7 @@ Para corrigir dosagem ou horário, delete o cadastro e adicione novamente com as
     );
 }
 
+// Add styles here...
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -247,13 +245,12 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
-        shadowRadius: 1.41,
-        elevation: 2,
+        shadowRadius: 1.5,
     },
     medicineHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        marginBottom: 10,
     },
     medicineName: {
         fontSize: 18,
@@ -261,38 +258,36 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     viewMoreButton: {
-        padding: 5,
+        paddingHorizontal: 10,
     },
     viewMoreText: {
-        color: '#0B3B60',
+        color: '#5a5a5a',
+        fontSize: 14,
     },
     medicineDetail: {
-        color: '#555',
         fontSize: 14,
-        marginTop: 5,
+        color: '#333',
+        marginBottom: 5,
     },
     cardButtons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 10,
     },
     completeButton: {
         backgroundColor: '#80CC28',
-        padding: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         borderRadius: 5,
-        flex: 1,
-        marginRight: 5,
     },
     deleteButton: {
-        backgroundColor: '#FF5A5A',
-        padding: 8,
+        backgroundColor: '#D32F2F',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         borderRadius: 5,
-        flex: 1,
-        marginLeft: 5,
     },
     buttonText: {
         color: '#FFF',
-        textAlign: 'center',
+        fontSize: 16,
         fontWeight: 'bold',
     },
 });

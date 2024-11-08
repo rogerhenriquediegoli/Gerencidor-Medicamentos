@@ -1,9 +1,9 @@
-
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import {Link} from 'expo-router'
+import { router } from 'expo-router';
 
-export default function cadastro() {
+export default function Cadastro() {
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -29,18 +29,23 @@ export default function cadastro() {
         <TextInput
           style={styles.input}
           placeholder="Insira sua senha"
-          keyboardType="email-address"
           autoCapitalize="none"
+          secureTextEntry={true}
         />
         <Text style={styles.captionInput}>Repita a senha</Text>
         <TextInput
           style={styles.input}
           placeholder="Insira sua senha"
-          keyboardType="email-address"
           autoCapitalize="none"
+          secureTextEntry={true}
         />
-        <Link href='/' style={styles.button}><Text style={styles.buttonText}>Cadastrar</Text></Link>
-        
+
+        <TouchableOpacity 
+          style={styles.button} 
+          onPress={() => router.push('/')}
+        >
+          <Text style={styles.buttonText}>Cadastrar</Text>
+        </TouchableOpacity>
       </View>
 
       <StatusBar style="auto" />
@@ -67,8 +72,8 @@ const styles = StyleSheet.create({
   imagem: {
     width: 280,
     height: 280,
-    marginBottom:-35,
-    marginTop:-50,
+    marginBottom: -35,
+    marginTop: -50,
   },
   input: {
     width: '85%',
@@ -79,12 +84,10 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderRadius: 5,
     backgroundColor: '#F8F8F8',
-
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   container: {

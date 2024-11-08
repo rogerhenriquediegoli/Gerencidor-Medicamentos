@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { router } from 'expo-router';
 
 export default function Perfil() {
     const [passwordVisible, setPasswordVisible] = useState(false);
+
     const handleLogout = () => {
         console.log('Logout pressed');
-        // Add your logout logic here (e.g., navigation or clearing tokens)
+        // Navigate to the login screen after logout
+        router.push('/'); // Assumes you have a "Login" screen in your stack
     };
 
     return (
         <View style={styles.container}>
             {/* Logout button */}
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                    <Image 
-                        source={require('../../assets/images/sair-logo.png')} // Configure the path
-                        style={styles.logoutImage}
-                    />
+                <Image 
+                    source={require('../../assets/images/sair-logo.png')} // Configure the path
+                    style={styles.logoutImage}
+                />
             </TouchableOpacity>
+
             <Text style={styles.titulo}>Meu perfil</Text>
             <View style={styles.linha}></View>
             <Text style={styles.textsCenter}>Informações pessoais</Text>

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Importing icons
+import { router } from 'expo-router';
 
 export default function Sobre() {
     const [whoVisible, setWhoVisible] = useState(false);
@@ -37,7 +38,8 @@ export default function Sobre() {
 
     const handleLogout = () => {
         console.log('Logout pressed');
-        // Add your logout logic here (e.g., navigation or clearing tokens)
+        // Using navigation to go back to the login page
+        router.push('/'); // Assumes you have a "Login" screen in your stack
     };
 
     return (
