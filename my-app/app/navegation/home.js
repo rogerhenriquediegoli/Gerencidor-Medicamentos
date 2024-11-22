@@ -25,9 +25,10 @@ export default function Index() {
         setMedicines(prevMedicines => prevMedicines.filter(medicine => medicine.id !== id));
     };
     const handleSeeMore = (id) => {
-        console.log(`Ver mais detalhes do medicamento ${id}`);
-        router.push(`details`);
+        router.push(`../details/${id}`);
+
     };
+    
     
 
     const filteredMedicines = medicines.filter(medicine =>
